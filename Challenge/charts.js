@@ -1,10 +1,10 @@
 function init() {
   // Grab a reference to the dropdown select element
-  var selector = d3.select("#selDataset");
+  let selector = d3.select("#selDataset");
 
   // Use the list of sample names to populate the select options
   d3.json("samples.json").then((data) => {
-    var sampleNames = data.names;
+    let sampleNames = data.names;
 
     sampleNames.forEach((sample) => {
       selector
@@ -14,7 +14,7 @@ function init() {
     });
 
     // Use the first sample from the list to build the initial plots
-    var firstSample = sampleNames[0];
+    let firstSample = sampleNames[0];
     buildCharts(firstSample);
     buildMetadata(firstSample);
   });
@@ -33,12 +33,12 @@ function optionChanged(newSample) {
 // Demographics Panel 
 function buildMetadata(sample) {
   d3.json("samples.json").then((data) => {
-    var metadata = data.metadata;
+    let metadata = data.metadata;
     // Filter the data for the object with the desired sample number
-    var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
-    var result = resultArray[0];
+    let resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
+    let result = resultArray[0];
     // Use d3 to select the panel with id of `#sample-metadata`
-    var PANEL = d3.select("#sample-metadata");
+    let PANEL = d3.select("#sample-metadata");
 
     // Use `.html("") to clear any existing metadata
     PANEL.html("");
@@ -58,7 +58,7 @@ function buildCharts(sample) {
   // 2. Use d3.json to load and retrieve the samples.json file 
   d3.json("samples.json").then((data) => {
     // 3. Create a variable that holds the samples array. 
-    var samplesArray = data.samples;
+    let samplesArray = data.samples;
     allSamples=[]
       for (let x = 0; x<samplesArray.length;x++) {
         allSamples.push({
@@ -68,13 +68,13 @@ function buildCharts(sample) {
         })
       };
    // 4. Create a variable that filters the samples for the object with the desired sample number.
-   var samplePick = samplesArray.filter(sampleObj => sampleObj.id == sample)
+   let samplePick = samplesArray.filter(sampleObj => sampleObj.id == sample)
    //  5. Create a variable that holds the first sample in the array.
-   var firstSample = samplePick[0]
+   let firstSample = samplePick[0]
    // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-   var  otu_ids = firstSample.otu_ids
-   var  otu_labels = firstSample.otu_labels
-   var  sample_values = firstSample.sample_values
+   let  otu_ids = firstSample.otu_ids
+   let  otu_labels = firstSample.otu_labels
+   let  sample_values = firstSample.sample_values
      // 8. Create the trace for the bar chart. 
      topTen=[]
      for (let x = 0; x<firstSample.sample_values.length;x++) {
@@ -85,18 +85,18 @@ function buildCharts(sample) {
        })
      };
      topTen = topTen.sort((a,b)=>b.sample_values-a.sample_values).slice(0,10)
-       //get the topTen for bar
-     var bar_otu_ids = []
-     var bar_otu_labels = []
-     var bar_sample_values = []
+       //get topTen for bars
+     let bar_otu_ids = []
+     let bar_otu_labels = []
+     let bar_sample_values = []
      for (samp of topTen){
        bar_otu_ids.push(samp.otu_ids)
        bar_otu_labels.push(samp.otu_labels)
        bar_sample_values.push(samp.sample_values)
      }
-     //compute averages per occurrence of each OTU ID
-    var otuTotal = {}
-    var otuCount = {}
+     // averages per occurrence of each OTU ID
+    let otuTotal = {}
+    let otuCount = {}
     for (let x=0;x<allSamples.length;x++) {
       for (let y=0;y<allSamples[x].otu_ids.length;y++){
         if (allSamples[x].otu_ids[y] in otuTotal){
@@ -108,17 +108,17 @@ function buildCharts(sample) {
           otuCount[allSamples[x].otu_ids[y]]=1
         }}
     }
-    var otuAvg = {}
+    let otuAvg = {}
     for (let x=0;x<Object.values(otuTotal).length;x++){
       otuAvg['OTU '+Object.keys(otuTotal)[x]] = Object.values(otuTotal)[x]/Object.values(otuCount)[x]
     }
-      //save avg values for OTU ID in the bar chart
-    var barAvg=[]
+      //save avg values for OTU ID (bar chart)
+    let barAvg=[]
     for (x of bar_otu_ids) {
       barAvg.push(otuAvg[x])
     }
-      //trace for bar
-    var barData = {
+      //trace bar
+    let barData = {
       name:"ID: "+sample.toString(),
       x: bar_sample_values,
       y: bar_otu_ids,
@@ -126,16 +126,16 @@ function buildCharts(sample) {
       type: "bar", 
       orientation: 'h'
     };
-    var barDataAvg = {
+    let barDataAvg = {
       name: "Avg",
       x: barAvg,
       y: bar_otu_ids,
       mode: "markers",
-      marker: {color:"black",size:5}
+      marker: {color:"pink",size:5}
     }
     barData = [barData,barDataAvg];
  // 9. Create the layout for the bar chart. 
- var barLayout = {
+ let barLayout = {
   title: "Top 10 Bacteria Cultures Found",
   yaxis: {autorange: "reversed"},
   autosize: true,
@@ -157,7 +157,7 @@ Plotly.newPlot("bar", barData, barLayout)
     }];
 
     // 2. Create the layout for the bubble chart.
-    var bubbleLayout = {
+    let bubbleLayout = {
       title: "Bacteria Cultures Per Sample",
       xaxis: {title:"OTU ID"},
       yaxis: {title:"Sample Value"},
@@ -181,16 +181,16 @@ Plotly.newPlot("bar", barData, barLayout)
     avg_wfreq = avg_wfreq.toFixed(2)
 
     // Filter the data for the object with the desired sample number
-    var metadataArray = metadata.filter(sampleObj => sampleObj.id == sample);
+    let metadataArray = metadata.filter(sampleObj => sampleObj.id == sample);
 
     // 2. Create a variable that holds the first sample in the metadata array.
-    var metadataPick = metadataArray[0];
+    let metadataPick = metadataArray[0];
 
     // 3. Create a variable that holds the washing frequency.
-    var wfreq = metadataPick.wfreq.toFixed(2)
+    let wfreq = metadataPick.wfreq.toFixed(2)
 
     // 4. Create the trace for the gauge chart.
-    var gaugeData = [{
+    let gaugeData = [{
         domain: { x: [0, 1], y: [0, 1] },
         value: wfreq,
         title: { text: "<span style='font-weight:bold'>Belly Button Washing Frequency</span><br><span style='font-size:0.8em'>Scrubs per Week</span>" },
